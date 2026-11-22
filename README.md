@@ -23,3 +23,16 @@ The chapters are written in Markdown so they can be read on GitHub, reviewed thr
 ## Status
 
 The manuscript is in development. Chapter structure and content may evolve as the book's central arguments become clearer.
+
+## Website
+
+The reading website is built with plain HTML, CSS, and JavaScript and is designed for GitHub Pages.
+
+- Homepage: `index.html`
+- Chapter reader: `reader.html`
+- Styles: `assets/css/style.css`
+- Reader interactions: `assets/js/`
+
+To publish, open **Settings → Pages**, choose **Deploy from a branch**, select **main** and **/(root)**, then save. Once GitHub Pages finishes its first deployment, the site will be available at:
+
+https://everlastinguc.github.io/jingalala-huhu/
