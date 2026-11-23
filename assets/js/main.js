@@ -1,38 +1,8 @@
-(() => {
-  const body = document.body;
-  const themeButton = document.getElementById("themeToggle");
-  const savedTheme = localStorage.getItem("ink-theme");
-  if (savedTheme !== "light") body.classList.add("dark");
-  const updateThemeLabel = () => {
-    if (!themeButton) return;
-    themeButton.setAttribute("aria-label", body.classList.contains("dark") ? "Switch to light mode" : "Switch to dark mode");
-  };
-  updateThemeLabel();
-  themeButton?.addEventListener("click", () => {
-    body.classList.toggle("dark");
-    localStorage.setItem("ink-theme", body.classList.contains("dark") ? "dark" : "light");
-    updateThemeLabel();
-  });
-  const menuButton = document.getElementById("menuToggle");
-  const nav = document.querySelector(".main-nav");
-  menuButton?.addEventListener("click", () => {
-    const open = nav.classList.toggle("open");
-    menuButton.setAttribute("aria-expanded", String(open));
-    menuButton.textContent = open ? "×" : "☰";
-  });
-  nav?.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
-    nav.classList.remove("open");
-    menuButton?.setAttribute("aria-expanded", "false");
-    if (menuButton) menuButton.textContent = "☰";
-  }));
-  const year = document.getElementById("year");
-  if (year) year.textContent = new Date().getFullYear();
-  const bar = document.getElementById("progressBar");
-  const updateProgress = () => {
-    if (!bar) return;
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.width = (max > 0 ? Math.min(100, window.scrollY / max * 100) : 0) + "%";
-  };
-  window.addEventListener("scroll", updateProgress, { passive: true });
-  updateProgress();
-})();
+import{initialiseProgress}from"./progress.js";import{initialiseToc}from"./toc.js";import{initialiseSearch}from"./search.js";import{initialiseSidebar}from"./sidebar.js";import{initialiseReaderSettings}from"./reader-settings.js";
+function escapeHTML(value){return value.replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]))}
+function inlineMarkdown(value){return escapeHTML(value).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\*(.+?)\*/g,"<em>$1</em>")}
+function slug(value){return value.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}
+function renderMarkdown(markdown){const output=[];let paragraph=[],list=null,quote=[];const flushParagraph=()=>{if(paragraph.length){output.push("<p>"+inlineMarkdown(paragraph.join(" "))+"</p>");paragraph=[]}};const flushList=()=>{if(list){output.push("</"+list+">");list=null}};const flushQuote=()=>{if(quote.length){output.push("<blockquote><p>"+quote.map(inlineMarkdown).join("</p><p>")+"</p></blockquote>");quote=[]}};for(const raw of markdown.replace(/\r/g,"").split("\n")){const line=raw.trim();if(!line){flushParagraph();flushList();flushQuote();continue}if(line==="---"){flushParagraph();flushList();flushQuote();output.push("<hr>");continue}const heading=line.match(/^(#{1,3})\s+(.+)$/);if(heading){flushParagraph();flushList();flushQuote();const level=heading[1].length,title=heading[2];if(/^End of Chapter/i.test(title)){output.push('<p class="chapter-end">'+inlineMarkdown(title.toUpperCase())+"</p>")}else{const id=slug(title);output.push("<h"+level+' id="'+id+'">'+inlineMarkdown(title)+"</h"+level+">")}continue}if(line.startsWith("> ")){flushParagraph();flushList();quote.push(line.slice(2));continue}const item=line.match(/^[-*]\s+(.+)$/)||line.match(/^\d+\.\s+(.+)$/);if(item){flushParagraph();flushQuote();const kind=/^\d+\./.test(line)?"ol":"ul";if(list!==kind){flushList();list=kind;output.push("<"+kind+">")}output.push("<li>"+inlineMarkdown(item[1])+"</li>");continue}flushList();flushQuote();paragraph.push(line)}flushParagraph();flushList();flushQuote();return output.join("\n")}
+async function loadChapter(){const target=document.getElementById("chapter-content");if(!target)return;try{const response=await fetch("book/chapters/01-study.md");if(!response.ok)throw new Error("Chapter request failed");target.innerHTML=renderMarkdown(await response.text());const headings=[...target.querySelectorAll("h2,h3")];document.dispatchEvent(new CustomEvent("chapter:loaded",{detail:headings.map(item=>({id:item.id,title:item.textContent}))}));initialiseToc(target);initialiseReadingProgress()}catch{target.textContent="The chapter could not be loaded. Check your connection and refresh the page."}}
+function initialiseReadingProgress(){const bar=document.getElementById("reading-progress");if(!bar)return;let queued=false;const update=()=>{const max=document.documentElement.scrollHeight-window.innerHeight;bar.style.width=(max>0?Math.min(100,window.scrollY/max*100):0)+"%";queued=false};window.addEventListener("scroll",()=>{if(!queued){queued=true;requestAnimationFrame(update)}},{passive:true});window.addEventListener("resize",update);update()}
+initialiseProgress();initialiseSearch();initialiseSidebar();initialiseReaderSettings();loadChapter();
