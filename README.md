@@ -1,38 +1,45 @@
 # Ink of the Mind
 
-*A philosophical exploration of human life, learning, emotions, expectations, relationships, and the questions that shape our existence.*
+*A philosophical manuscript on learning, human life, thought, and the questions that shape our understanding.*
 
-## About the book
+## About
 
-**Ink of the Mind** examines how we think, learn, feel, make decisions, relate to others, and understand life. It is not intended to hand readers a fixed formula for living. It aims to encourage careful thought, honest questioning, and independent judgement.
+**Ink of the Mind** examines how people think, learn, feel, make decisions, and relate to the world around them. It brings philosophical questions into conversation with everyday experience and, where relevant, ideas from psychology and the sciences.
 
-The book will explore philosophical questions alongside practical experiences and, where relevant, evidence from psychology and the sciences. It will distinguish reasoned arguments from personal opinions and avoid presenting uncertain claims as universal truths.
+The manuscript does not aim to prescribe a universal formula for living. It encourages careful reasoning, honest questioning, and independent judgement. Reasoned arguments, personal opinions, and uncertain claims should be treated distinctly.
 
-## Chapters
+## Contents
 
 ### Part I — Understanding the Foundations
 
-1. [Study — The Meaning of Learning](book/chapters/01-study.md)
+| Chapter | Title | Status |
+| --- | --- | --- |
+| 01 | [Study — The Meaning of Learning](book/chapters/01-study.md) | Available |
 
-More chapters will be added as the manuscript develops.
+Further chapters will be added as the manuscript develops.
 
-## Reading the manuscript
+## Reading the book
 
-The chapters are written in Markdown so they can be read on GitHub, reviewed through version history, and later prepared for publication in formats such as PDF and EPUB.
+The project includes a minimal, responsive reading website built with HTML, CSS, and JavaScript.
+
+- **Homepage:** [index.html](index.html)
+- **Chapter reader:** [reader.html](reader.html)
+- **Manuscript:** [book/chapters](book/chapters/)
+- **Stylesheet:** [assets/css/style.css](assets/css/style.css)
+- **Reader scripts:** [assets/js](assets/js/)
+
+The chapter manuscript is maintained in Markdown. The reader loads the chapter directly, generates a contents list from its headings, and provides adjustable text sizing and a persistent theme preference.
+
+## Development
+
+The website uses no build step or runtime dependencies. It is designed to run as a static site on GitHub Pages.
+
+To publish it, open **Settings → Pages**, select **Deploy from a branch**, choose the main branch and the root directory, then save.
 
 ## Status
 
-The manuscript is in development. Chapter structure and content may evolve as the book's central arguments become clearer.
+The manuscript and reading experience are actively developing. Chapter structure, arguments, and presentation may be revised as the work matures.
 
-## Website
+---
 
-The reading website is built with plain HTML, CSS, and JavaScript and is designed for GitHub Pages.
-
-- Homepage: `index.html`
-- Chapter reader: `reader.html`
-- Styles: `assets/css/style.css`
-- Reader interactions: `assets/js/`
-
-To publish, open **Settings → Pages**, choose **Deploy from a branch**, select **main** and **/(root)**, then save. Once GitHub Pages finishes its first deployment, the site will be available at:
-
-https://everlastinguc.github.io/jingalala-huhu/
+© Ink of the Mind
