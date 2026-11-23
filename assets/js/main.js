@@ -2,7 +2,7 @@
   const body = document.body;
   const themeButton = document.getElementById("themeToggle");
   const savedTheme = localStorage.getItem("ink-theme");
-  if (savedTheme === "dark") body.classList.add("dark");
+  if (savedTheme !== "light") body.classList.add("dark");
   const updateThemeLabel = () => {
     if (!themeButton) return;
     themeButton.setAttribute("aria-label", body.classList.contains("dark") ? "Switch to light mode" : "Switch to dark mode");
